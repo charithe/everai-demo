@@ -80,11 +80,11 @@ func buildRequest(capturedImgPath string) *http.Request {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 
-	if err := addImageToMIMEBody(w, "image1", *refImg); err != nil {
+	if err := addMIMEPart(w, "image1", *refImg); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := addImageToMIMEBody(w, "image2", capturedImgPath); err != nil {
+	if err := addMIMEPart(w, "image2", capturedImgPath); err != nil {
 		log.Fatal(err)
 	}
 
@@ -100,7 +100,7 @@ func buildRequest(capturedImgPath string) *http.Request {
 	return req
 }
 
-func addImageToMIMEBody(w *multipart.Writer, name, imgPath string) error {
+func addMIMEPart(w *multipart.Writer, name, imgPath string) error {
 	header := make(textproto.MIMEHeader)
 	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s.jpg"`, name, imgPath))
 	header.Set("Content-Type", "image/jpeg")
